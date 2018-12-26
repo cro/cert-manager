@@ -71,7 +71,7 @@ verify_lint:
 		//hack:verify-boilerplate \
 		//hack:verify-links \
 		//hack:verify-errexit \
-		//hack:verify-gofmt
+		//hack:verify-gofmt --incompatible_remove_native_git_repository=false
 
 verify_unit:
 	bazel test \
@@ -82,16 +82,16 @@ verify_unit:
 
 verify_deps:
 	bazel test \
-		//hack:verify-deps
+		//hack:verify-deps --incompatible_remove_native_git_repository=false
 
 verify_codegen:
 	bazel test \
 		//hack:verify-codegen \
-		//hack:verify-deploy-gen
+		//hack:verify-deploy-gen --incompatible_remove_native_git_repository=false
 
 verify_docs:
 	bazel test \
-		//hack:verify-reference-docs
+		//hack:verify-reference-docs --incompatible_remove_native_git_repository=false
 
 # requires docker
 verify_chart:
@@ -101,11 +101,11 @@ verify_chart:
 ############
 $(CMDS):
 	bazel build \
-		//cmd/$@
+		//cmd/$@ --incompatible_remove_native_git_repository=false
 
 e2e_test:
 	mkdir -p "$$(pwd)/_artifacts"
-	bazel build //hack/bin:helm //test/e2e:e2e.test
+	bazel build //hack/bin:helm //test/e2e:e2e.test --incompatible_remove_native_git_repository=false
 	# Run e2e tests
 	KUBECONFIG=$(KUBECONFIG) \
 		bazel run //vendor/github.com/onsi/ginkgo/ginkgo -- \
@@ -122,12 +122,12 @@ e2e_test:
 ##################
 
 generate:
-	bazel run //hack:update-bazel
-	bazel run //hack:update-gofmt
-	bazel run //hack:update-codegen
-	bazel run //hack:update-deploy-gen
-	bazel run //hack:update-reference-docs
-	bazel run //hack:update-deps
+	bazel run //hack:update-bazel --incompatible_remove_native_git_repository=false
+	bazel run //hack:update-gofmt --incompatible_remove_native_git_repository=false
+	bazel run //hack:update-codegen --incompatible_remove_native_git_repository=false
+	bazel run //hack:update-deploy-gen --incompatible_remove_native_git_repository=false
+	bazel run //hack:update-reference-docs --incompatible_remove_native_git_repository=false
+	bazel run //hack:update-deps --incompatible_remove_native_git_repository=false
 
 # Docker targets
 ################
@@ -135,7 +135,7 @@ generate:
 BAZEL_IMAGE_ENV := APP_VERSION=$(APP_VERSION) DOCKER_REPO=$(DOCKER_REPO) DOCKER_TAG=$(APP_VERSION)
 images:
 	$(BAZEL_IMAGE_ENV) \
-		bazel run //:images
+		bazel run //:images --incompatible_remove_native_git_repository=false
 
 images_push: images
 	# we do not use the :push target as Quay.io does not support v2.2
