@@ -67,14 +67,14 @@ verify: verify_lint verify_codegen verify_deps verify_unit verify_docs
 push: docker_push
 
 verify_lint:
-	bazel test \
+	bazel test --incompatible_remove_native_git_repository=false \
 		//hack:verify-boilerplate \
 		//hack:verify-links \
 		//hack:verify-errexit \
 		//hack:verify-gofmt --incompatible_remove_native_git_repository=false
 
 verify_unit:
-	bazel test \
+	bazel test --incompatible_remove_native_git_repository=false \
 		$$(bazel query 'kind("go._*test", "...")' \
 			| grep -v //vendor/ \
 			| grep -v //test/e2e \
@@ -85,7 +85,7 @@ verify_deps:
 		//hack:verify-deps --incompatible_remove_native_git_repository=false
 
 verify_codegen:
-	bazel test \
+	bazel test --incompatible_remove_native_git_repository=false \
 		//hack:verify-codegen \
 		//hack:verify-deploy-gen --incompatible_remove_native_git_repository=false
 
