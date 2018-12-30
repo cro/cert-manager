@@ -74,7 +74,7 @@ verify_lint:
 		//hack:verify-gofmt --incompatible_remove_native_git_repository=false
 
 verify_unit:
-	bazel test --incompatible_remove_native_git_repository=false \
+	bazel test --test_verbose_timeout_warnings --incompatible_remove_native_git_repository=false \
 		$$(bazel query 'kind("go._*test", "...")' \
 			| grep -v //vendor/ \
 			| grep -v //test/e2e \
