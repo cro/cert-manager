@@ -40,3 +40,4 @@ release_push:
   - make images_push APP_VERSION="${CI_COMMIT_TAG}"
   only:
   - tags
+
